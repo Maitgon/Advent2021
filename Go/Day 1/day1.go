@@ -30,9 +30,9 @@ func main() {
 	}
 	values := vals[:len(vals)-1]
 
-	sol1 := part1(values)
+	sol1 := part(values, 1)
 
-	sol2 := part2(values)
+	sol2 := part(values, 3)
 
 	end := time.Since(start)
 
@@ -42,23 +42,12 @@ func main() {
 
 }
 
-func part1(values []int16) int16 {
+func part(values []int16, n int) int16 {
 	count := 0
-	for i := 0; i < len(values) - 1; i++ {
-		if values[i] < values[i+1] {
+	for i := 0; i < len(values) - n; i++ {
+		if values[i] < values[i+n] {
 			count++
 		}
-	}
-	return int16(count)
-}
-
-func part2(values []int16) int16 {
-	count := 0
-	for i := 0; i < len(values) - 3; i++ {
-		if values[i] + values[i+1] + values[i+2] <
-		   values[i+1] + values[i+2] + values[i+3] {
-			   count++
-		   }
 	}
 	return int16(count)
 }
