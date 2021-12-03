@@ -6,13 +6,12 @@ import (
 	"strings"
 	"strconv"
 	"math"
-	//"os"
-	//"time"
+	"time"
 )
 
 func main() {
 
-	//start := time.Now()
+	start := time.Now()
 
 	// Input reading
 	bs, err := ioutil.ReadFile("./Go/Day 03/input.txt")
@@ -24,14 +23,16 @@ func main() {
 	input := strings.Split(string(bs), "\n")
 	input = input[:len(input)-1]
 
-	fmt.Println(input)
-
 	sol1 := part1(input)
 	sol2 := part2(input)
 
 
-	fmt.Println(sol1)
-	fmt.Println(sol2)
+	end := time.Since(start)
+
+	fmt.Println("The solution to part 1 is: ", sol1)
+	fmt.Println("The solution to part 2 is: ", sol2)
+	fmt.Println("Time: ", end)
+
 }
 
 func part1(input []string) int64 {
@@ -53,16 +54,13 @@ func part1(input []string) int64 {
 		}
 	}
 	gammaRate, _ := strconv.ParseInt(x, 2, 16)
-	fmt.Println(gammaRate)
 	epsilonRate := int64(math.Pow(2,float64(len(x)))) - gammaRate- 1
-	fmt.Println(len(x))
 	return gammaRate * epsilonRate
 }
 
 func part2(input []string) int64 {
 	gammaRate, _ := strconv.ParseInt(findGamma(input), 2, 16)
 	epsilonRate, _ := strconv.ParseInt(findEpsilon(input), 2, 16)
-	fmt.Println(gammaRate, epsilonRate)
 	return gammaRate * epsilonRate
 }
 
