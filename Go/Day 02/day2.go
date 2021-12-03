@@ -65,7 +65,7 @@ func main() {
 	start := time.Now()
 
 	// Input reading
-	bs, err := ioutil.ReadFile("./Go/Day 2/input.txt")
+	bs, err := ioutil.ReadFile("./Go/Day 02/input.txt")
 
 	if err != nil {
 		bs, _ = ioutil.ReadFile("input.txt")
