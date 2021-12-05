@@ -9,3 +9,4 @@ These are my solutions for the advent of code 2021 event. My idea is to solve al
 | Day 1 | 302&mu;s |
 | Day 2 | 376&mu;s |
 | Day 3 | 375&mu;s |
+| Day 4 | 3.8ms |
