@@ -120,7 +120,6 @@ func getNonMarked(bingo [][]newNum) int16 {
 	sum := int16(0)
 	for _, value := range bingo {
 		for _, val := range value {
-			fmt.Println(val.num, val.check)
 			if !val.check {
 				sum += val.num
 			}
