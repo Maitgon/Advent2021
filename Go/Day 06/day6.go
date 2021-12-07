@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"strings"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -31,8 +31,6 @@ func main() {
 		input[uint(val)] += 1
 	}
 
-	fmt.Println(input)
-
 	sol1, sol2 := part1y2(input, 80, 256)
 
 	end := time.Since(start)
@@ -45,7 +43,7 @@ func main() {
 
 func oneDay(input []int64) []int64 {
 	result := make([]int64, 9)
-	for _, i := range [7]uint{0,1,2,3,4,5,7} {
+	for _, i := range [7]uint{0, 1, 2, 3, 4, 5, 7} {
 		result[i] = input[i+1]
 	}
 	result[6] = input[0] + input[7]
@@ -57,7 +55,7 @@ func part1y2(input []int64, days1, days2 uint16) (int64, int64) {
 	i := uint16(0)
 
 	// Part 1
-	for ;i < days1; i++ {
+	for ; i < days1; i++ {
 		input = oneDay(input)
 	}
 	sol1 := int64(0)
@@ -66,7 +64,7 @@ func part1y2(input []int64, days1, days2 uint16) (int64, int64) {
 	}
 
 	// Part 2
-	for ;i < days2; i++ {
+	for ; i < days2; i++ {
 		input = oneDay(input)
 	}
 	sol2 := int64(0)
