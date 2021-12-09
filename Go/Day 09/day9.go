@@ -8,7 +8,7 @@ import (
 )
 
 type intSeen struct {
-	num   int
+	num   int8
 	visto bool
 }
 
@@ -25,13 +25,13 @@ func main() {
 
 	inputS := strings.Split(string(bs), "\n")
 
-	var matrix [][]intSeen
-	for _, val := range inputS {
-		var aux []intSeen
-		for _, num := range val {
-			aux = append(aux, intSeen{int(num - '0'), false})
+	matrix := make([][]intSeen, len(inputS))
+	for i, val := range inputS {
+		aux := make([]intSeen, len(inputS[0]))
+		for j, num := range val {
+			aux[j] = intSeen{num: int8(num - '0'), visto: false}
 		}
-		matrix = append(matrix, aux)
+		matrix[i] = aux
 	}
 
 	sol1 := part1(matrix)
@@ -67,7 +67,7 @@ func part1(matrix [][]intSeen) int {
 	for i := range matrix {
 		for j := range matrix[0] {
 			if isLowPoint(matrix, i, j) {
-				risk += 1 + matrix[i][j].num
+				risk += 1 + int(matrix[i][j].num)
 			}
 		}
 	}
