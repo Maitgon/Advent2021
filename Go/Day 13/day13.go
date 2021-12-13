@@ -54,67 +54,80 @@ func main() {
 	fmt.Println("The solution to part 1 is: ", sol1)
 	fmt.Println("The solution to part 2 is, uhmmmm, this????????: ")
 	for _, val := range sol2 {
-		fmt.Println(val)
+		fmt.Println(string(val))
 	}
 	fmt.Println("Time: ", end)
 
 }
 
-func part1y2(coordinates []point, folds []folding) (int, [][]string) {
-	grid := make([][]string, folds[0].pos*2+1)
-	for i := 0; i <= folds[0].pos*2; i++ {
-		grid[i] = make([]string, folds[0].pos*2+1)
-		for j := 0; j <= folds[0].pos*2; j++ {
-			grid[i][j] = " "
-		}
-	}
+func part1y2(coordinates []point, folds []folding) (int, [][]rune) {
 
-	// Rellenamos el tablero
-	for _, coord := range coordinates {
-		grid[coord.y][coord.x] = "█"
-	}
-
-	foldOnce(grid, folds[0])
-
-	count := 0
-	for i := range grid {
-		for j := range grid {
-			if grid[i][j] == "█" {
-				count++
-			}
-		}
-	}
+	foldOnce(&coordinates, folds[0])
+	count := len(coordinates)
 
 	for i := 1; i < len(folds); i++ {
-		foldOnce(grid, folds[i])
+		foldOnce(&coordinates, folds[i])
 	}
 
-	sol2 := make([][]string, 6)
+	sol2 := make([][]rune, 6)
 	for i := 0; i < 6; i++ {
-		sol2[i] = (grid[i])[:39]
+		aux := make([]rune, 39)
+		for j := 0; j < 39; j++ {
+			aux[j] = ' '
+		}
+		sol2[i] = aux
+	}
+
+	for _, val := range coordinates {
+		sol2[val.y][val.x] = '█' // WTF is even this thing
 	}
 
 	return count, sol2
 }
 
-func foldOnce(grid [][]string, fold folding) {
+func foldOnce(coordinates *[]point, fold folding) {
 	if fold.axis == "x" {
-		for i := range grid {
-			for j := fold.pos + 1; j < len(grid); j++ {
-				if grid[i][j] == "█" {
-					grid[i][2*fold.pos-j] = "█"
-					grid[i][j] = " "
+		for i := 0; i < len(*coordinates); {
+			if (*coordinates)[i].x > fold.pos {
+				newPoint := point{x: 2*fold.pos - (*coordinates)[i].x, y: (*coordinates)[i].y}
+				if !search(*coordinates, newPoint) {
+					(*coordinates)[i] = newPoint
+					i++
+				} else {
+					remove(coordinates, i)
 				}
+			} else {
+				i++
 			}
 		}
 	} else if fold.axis == "y" {
-		for i := fold.pos + 1; i < len(grid); i++ {
-			for j := range grid {
-				if grid[i][j] == "█" {
-					grid[2*fold.pos-i][j] = "█"
-					grid[i][j] = " "
+		for i := 0; i < len(*coordinates); {
+			if (*coordinates)[i].y > fold.pos {
+				newPoint := point{y: 2*fold.pos - (*coordinates)[i].y, x: (*coordinates)[i].x}
+				if !search(*coordinates, newPoint) {
+					(*coordinates)[i] = newPoint
+					i++
+				} else {
+					remove(coordinates, i)
 				}
+			} else {
+				i++
 			}
 		}
 	}
+
+}
+
+func remove(s *[]point, i int) {
+	(*s)[i] = (*s)[len(*s)-1]
+	(*s) = (*s)[:len(*s)-1]
+}
+
+func search(s []point, p point) bool {
+	for _, elem := range s {
+		if elem == p {
+			return true
+		}
+	}
+	return false
 }
