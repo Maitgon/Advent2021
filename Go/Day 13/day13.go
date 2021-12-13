@@ -65,13 +65,13 @@ func part1y2(coordinates []point, folds []folding) (int, [][]string) {
 	for i := 0; i <= folds[0].pos*2; i++ {
 		grid[i] = make([]string, folds[0].pos*2+1)
 		for j := 0; j <= folds[0].pos*2; j++ {
-			grid[i][j] = "."
+			grid[i][j] = " "
 		}
 	}
 
 	// Rellenamos el tablero
 	for _, coord := range coordinates {
-		grid[coord.y][coord.x] = "#"
+		grid[coord.y][coord.x] = "█"
 	}
 
 	foldOnce(grid, folds[0])
@@ -79,7 +79,7 @@ func part1y2(coordinates []point, folds []folding) (int, [][]string) {
 	count := 0
 	for i := range grid {
 		for j := range grid {
-			if grid[i][j] == "#" {
+			if grid[i][j] == "█" {
 				count++
 			}
 		}
@@ -101,18 +101,18 @@ func foldOnce(grid [][]string, fold folding) {
 	if fold.axis == "x" {
 		for i := range grid {
 			for j := fold.pos + 1; j < len(grid); j++ {
-				if grid[i][j] == "#" {
-					grid[i][2*fold.pos-j] = "#"
-					grid[i][j] = "."
+				if grid[i][j] == "█" {
+					grid[i][2*fold.pos-j] = "█"
+					grid[i][j] = " "
 				}
 			}
 		}
 	} else if fold.axis == "y" {
 		for i := fold.pos + 1; i < len(grid); i++ {
 			for j := range grid {
-				if grid[i][j] == "#" {
-					grid[2*fold.pos-i][j] = "#"
-					grid[i][j] = "."
+				if grid[i][j] == "█" {
+					grid[2*fold.pos-i][j] = "█"
+					grid[i][j] = " "
 				}
 			}
 		}
