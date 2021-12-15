@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/heap"
 	"fmt"
 	"io/ioutil"
 	"math"
@@ -9,7 +10,25 @@ import (
 )
 
 type cell struct {
-	x, y int32
+	x, y, risk int32
+}
+
+type cellHeap []cell
+
+func (h cellHeap) Len() int           { return len(h) }
+func (h cellHeap) Less(i, j int) bool { return h[i].risk < h[j].risk }
+func (h cellHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *cellHeap) Push(x interface{}) {
+	*h = append(*h, x.(cell))
+}
+
+func (h *cellHeap) Pop() interface{} {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
 }
 
 func main() {
@@ -77,19 +96,15 @@ func part1(matrix [][]int32) int32 {
 	dx := []int32{-1, 0, 1, 0}
 	dy := []int32{0, 1, 0, -1}
 
-	setCells := make(map[cell]int32)
-	setCells[cell{x: 0, y: 0}] = 0
+	var setCells cellHeap
+	setCells.Push(cell{x: 0, y: 0, risk: 0})
 
 	distances[0][0] = matrix[0][0]
 
 	for len(setCells) != 0 {
 
-		var cell0 cell
-		for k := range setCells {
-			cell0 = k
-			break
-		}
-		delete(setCells, cell0)
+		cell0 := setCells[0]
+		heap.Pop(&setCells)
 
 		for i := 0; i < 4; i++ {
 			x := cell0.x + dx[i]
@@ -99,13 +114,12 @@ func part1(matrix [][]int32) int32 {
 				continue
 			} else if distances[x][y] > distances[cell0.x][cell0.y]+matrix[x][y] {
 				if distances[x][y] != math.MaxInt32 {
-					if _, ok := setCells[cell0]; ok {
-						delete(setCells, cell0)
-						setCells[cell0] = distances[cell0.x][cell0.y] + matrix[x][y]
+					if ok, k := binarySearch(cell{x: x, y: y, risk: distances[x][y]}, setCells); ok {
+						heap.Remove(&setCells, k)
 					}
 				}
 				distances[x][y] = distances[cell0.x][cell0.y] + matrix[x][y]
-				setCells[cell{x: x, y: y}] = distances[x][y]
+				setCells.Push(cell{x: x, y: y, risk: distances[x][y]})
 
 			}
 		}
@@ -126,6 +140,28 @@ func Min(x, y int32) int32 {
 	} else {
 		return y
 	}
+}
+
+func binarySearch(needle cell, haystack cellHeap) (bool, int) {
+
+	low := 0
+	high := len(haystack) - 1
+
+	for low <= high {
+		median := (low + high) / 2
+
+		if haystack[median].risk < needle.risk {
+			low = median + 1
+		} else {
+			high = median - 1
+		}
+	}
+
+	if low == len(haystack) || haystack[low] != needle {
+		return false, -1
+	}
+
+	return true, low
 }
 
 /*
