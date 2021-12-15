@@ -12,7 +12,7 @@ func main() {
 	start := time.Now()
 
 	// Input reading
-	bs, err := ioutil.ReadFile("./Go/Day 11/input.txt")
+	bs, err := ioutil.ReadFile("./Go/Day 11/inputAux.txt")
 
 	if err != nil {
 		bs, _ = ioutil.ReadFile("input.txt")
