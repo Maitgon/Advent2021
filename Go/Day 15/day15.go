@@ -9,7 +9,7 @@ import (
 )
 
 type cell struct {
-	x, y, risk int32
+	x, y int32
 }
 
 func main() {
@@ -77,44 +77,40 @@ func part1(matrix [][]int32) int32 {
 	dx := []int32{-1, 0, 1, 0}
 	dy := []int32{0, 1, 0, -1}
 
-	var setCells []cell
-	setCells = append(setCells, cell{x: 0, y: 0, risk: 0})
+	setCells := make(map[cell]int32)
+	setCells[cell{x: 0, y: 0}] = 0
 
 	distances[0][0] = matrix[0][0]
 
 	for len(setCells) != 0 {
 
-		cell0 := setCells[0]
-		removeFirst(&setCells)
+		var cell0 cell
+		for k := range setCells {
+			cell0 = k
+			break
+		}
+		delete(setCells, cell0)
 
 		for i := 0; i < 4; i++ {
 			x := cell0.x + dx[i]
 			y := cell0.y + dy[i]
 
-			//if isInsideGrid(matrix, x, y) {
-			//fmt.Println(distances[x][y], cell0.x, cell0.y, x, y)
-			//}
-
 			if !isInsideGrid(matrix, x, y) {
 				continue
 			} else if distances[x][y] > distances[cell0.x][cell0.y]+matrix[x][y] {
 				if distances[x][y] != math.MaxInt32 {
-					if ok, i := search(setCells, cell0); ok {
-						//fmt.Println("pasa")
-						setCells[i].risk = distances[cell0.x][cell0.y] + matrix[x][y]
+					if _, ok := setCells[cell0]; ok {
+						delete(setCells, cell0)
+						setCells[cell0] = distances[cell0.x][cell0.y] + matrix[x][y]
 					}
 				}
 				distances[x][y] = distances[cell0.x][cell0.y] + matrix[x][y]
-				setCells = append(setCells, cell{x: x, y: y, risk: distances[x][y]})
+				setCells[cell{x: x, y: y}] = distances[x][y]
 
 			}
 		}
 
 	}
-
-	//for i := range distances {
-	//fmt.Println(distances[i])
-	//}
 
 	return distances[len(matrix)-1][len(matrix[0])-1] - matrix[0][0]
 
@@ -132,6 +128,7 @@ func Min(x, y int32) int32 {
 	}
 }
 
+/*
 func removeFirst(s *[]cell) {
 	(*s) = (*s)[1:]
 }
@@ -144,3 +141,4 @@ func search(s []cell, p cell) (bool, int32) {
 	}
 	return false, -1
 }
+*/
