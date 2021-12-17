@@ -53,12 +53,16 @@ func part1(start, min, max coord) int {
 
 	for xVel := 1; xVel < max.x; xVel++ {
 		xPos := 0
-		for xVelAux := xVel; xVelAux > 0 && xPos <= max.x; xVelAux-- {
+		var xVelAux int
+		for xVelAux = xVel; xVelAux > 0 && xPos <= max.x; xVelAux-- {
 			xPos += xVelAux
 			if xPos >= min.x && xPos <= max.x && xVelAux == 1 {
 				xRange = append(xRange, xVel)
 				break
 			}
+		}
+		if xVelAux > 1 {
+			break
 		}
 	}
 
