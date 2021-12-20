@@ -23,3 +23,5 @@ These are my solutions for the advent of code 2021 event. My idea is to solve al
 | Day 15 | 96ms |
 | Day 16 | 559&mu;s |
 | Day 17 | 1.02ms |
+| Day 18 | ?????? |
+| Day 19 | 3.1s |
