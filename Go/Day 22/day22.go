@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type cuboid struct {
@@ -55,8 +56,10 @@ func (c cuboid) intersection(cAux cuboid) (cuboid, bool) {
 	}
 
 	var newSign bool
-	if c.sign == cAux.sign {
-		newSign = !c.sign
+	if c.sign && cAux.sign {
+		newSign = false
+	} else if !c.sign && !cAux.sign {
+		newSign = true
 	} else {
 		newSign = cAux.sign
 	}
@@ -67,9 +70,9 @@ func (c cuboid) intersection(cAux cuboid) (cuboid, bool) {
 }
 
 func (c cuboid) volume() int {
-	dx := c.x2 - c.x1
-	dy := c.y2 - c.y1
-	dz := c.z2 - c.z1
+	dx := c.x2 - c.x1 + 1
+	dy := c.y2 - c.y1 + 1
+	dz := c.z2 - c.z1 + 1
 
 	vol := dx * dy * dz
 
@@ -82,7 +85,7 @@ func (c cuboid) volume() int {
 
 func main() {
 
-	//start := time.Now()
+	start := time.Now()
 
 	bs, err := ioutil.ReadFile("./Go/Day 22/input.txt")
 
@@ -107,8 +110,14 @@ func main() {
 
 	inputPart1 := input[:stop]
 
+	end := time.Since(start)
+
 	sol1 := solve(inputPart1)
-	fmt.Println(sol1)
+	sol2 := solve(input)
+
+	fmt.Printf("Solution to part 1 is: %d\n", sol1)
+	fmt.Printf("Solution to part 2 is: %d\n", sol2)
+	fmt.Println("Time: ", end)
 
 }
 
@@ -117,12 +126,17 @@ func solve(input []cuboid) int {
 	var newList []cuboid
 
 	for _, cub := range input {
+
+		var toAdd []cuboid
+
 		for _, cubAux := range newList {
-			newCub, inters := cub.intersection(cubAux)
+			newCub, inters := cubAux.intersection(cub)
 			if inters {
-				newList = append(newList, newCub)
+				toAdd = append(toAdd, newCub)
 			}
 		}
+
+		newList = append(newList, toAdd...)
 
 		if cub.sign {
 			newList = append(newList, cub)
@@ -131,7 +145,6 @@ func solve(input []cuboid) int {
 
 	totalVol := 0
 	for _, cub := range newList {
-		fmt.Println(cub.volume())
 		totalVol += cub.volume()
 	}
 
