@@ -1,0 +1,6 @@
+{"version": "1.2.0",
+ "packagesDir": ".lake/packages",
+ "packages": [],
+ "name": "«AOC2021-Lean»",
+ "lakeDir": ".lake",
+ "fixedToolchain": false}

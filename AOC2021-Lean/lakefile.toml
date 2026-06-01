@@ -1,0 +1,10 @@
+name = "AOC2021-Lean"
+version = "0.1.0"
+defaultTargets = ["aoc2021-lean"]
+
+[[lean_lib]]
+name = "AOC2021Lean"
+
+[[lean_exe]]
+name = "aoc2021-lean"
+root = "Main"
