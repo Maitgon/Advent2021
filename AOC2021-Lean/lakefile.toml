@@ -6,5 +6,7 @@ defaultTargets = ["aoc2021-lean"]
 name = "AOC2021Lean"
 
 [[lean_exe]]
-name = "aoc2021-lean"
+name = "aoc"
 root = "Main"
+
+defaultTargets = ["aoc"]
